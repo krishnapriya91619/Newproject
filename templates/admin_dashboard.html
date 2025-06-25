@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard | Tuition Centre</title>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7fa;
+        }
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 250px;
+            background-color: #0d3b66;
+            color: white;
+            padding-top: 20px;
+            transition: all 0.3s;
+        }
+        .sidebar .navbar-brand {
+            color: white;
+            font-size: 1.5rem;
+            padding: 20px;
+            display: block;
+            text-align: center;
+        }
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .sidebar ul li {
+            padding: 15px 20px;
+        }
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+            display: block;
+        }
+        .sidebar ul li a:hover {
+            background-color: #1a4971;
+            border-radius: 5px;
+        }
+        .content {
+            margin-left: 250px;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .table-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h2, h3 {
+            color: #0d3b66;
+        }
+        .btn-logout {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            width: calc(100% - 40px);
+            text-align: center;
+        }
+        .sidebar .btn-add-course {
+            width: 100%;
+            margin-top: 20px;
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+        .sidebar .btn-add-course:hover {
+            background-color: #218838;
+            border-color: #1e7e34;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 200px;
+            }
+            .content {
+                margin-left: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <a class="navbar-brand" href="{% url 'home' %}">Tuition Centre</a>
+        <ul>
+            <li><strong>Total Pending: {{ pending_count }}</strong></li>
+        </ul>
+        <a href="{% url 'add_course' %}" class="btn btn-success btn-add-course">Add Course</a>
+        <a href="{% url 'logout' %}" class="btn btn-danger btn-logout">Logout</a>
+    </div>
+    <div class="content">
+        <h2>Admin Dashboard</h2>
+        <div class="table-container">
+            <h3>Pending Teachers</h3>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Course</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for teacher in pending_teachers %}
+                    <tr>
+                        <td>{{ teacher.user.first_name }} {{ teacher.user.last_name }}</td>
+                        <td>{{ teacher.user.username }}</td>
+                        <td>{{ teacher.email }}</td>
+                        <td>{{ teacher.course.course_name }}</td>
+                        <td><a href="{% url 'approve_user' teacher.user.id %}" class="btn btn-primary btn-sm">Review</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="table-container mt-4">
+            <h3>Pending Students</h3>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Course</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in pending_students %}
+                    <tr>
+                        <td>{{ student.user.first_name }} {{ student.user.last_name }}</td>
+                        <td>{{ student.user.username }}</td>
+                        <td>{{ student.email }}</td>
+                        <td>{{ student.course.course_name }}</td>
+                        <td><a href="{% url 'approve_user' student.user.id %}" class="btn btn-primary btn-sm">Review</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
